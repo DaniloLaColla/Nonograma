@@ -1,0 +1,100 @@
+body {
+  font: 14px "Century Gothic", Futura, sans-serif; 
+  background: url(img/fondo.png); 
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-color: rgb(241, 196, 15);
+ 
+  margin : 50px 390px -500px; 
+}
+
+.react-switch {
+  margin: 215px -1px 20px; 
+}
+
+.square:hover {
+  background-color: rgb(158, 170, 162);
+}
+
+.square {
+  background: #fff;
+  border: 2px solid rgb(8, 8, 8);
+  font-size: 32px;
+  font-weight: 500;
+  margin-right: -1px;
+  margin-top: -1px;
+  padding: 0;
+  text-align: center;
+}
+
+.pistaVerdeClaro {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #f5f6f7;
+  border-radius: 8px;
+  margin: 5px;
+}
+
+.pistaVerdeClaro div {
+  margin: 2px
+}
+
+.colClues .pistaVerdeClaro {
+  flex-direction: column;
+}
+
+.fondoPintado {
+  background: rgb(0, 0, 0);
+}
+
+.square:focus {
+  outline: none;
+}
+
+.board {
+  display: grid;
+}
+
+.horizontal {
+  display: flex;
+}
+
+.vertical {
+  display: flex;
+  flex-direction: column;
+}
+
+.rowClues {
+  display: grid;
+}
+
+.colClues {
+  display: grid;
+}
+
+.clue {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #ade4af;
+  border-radius: 8px;
+  margin: 5px;
+}
+
+.clue div {
+  margin: 2px
+}
+
+.colClues .clue {
+  flex-direction: column;
+}
+
+.game {
+  display: flex;
+  flex-direction: row;
+}
+
+.gameInfo {
+  margin-left: 20px;
+}
