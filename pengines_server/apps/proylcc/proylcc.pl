@@ -62,28 +62,23 @@ put(Contenido, [RowN, ColN], PistasFilas, PistasColumnas, Grilla, NewGrilla, Fil
 
 recuperar_lista(0, [X|_Xs], X).
 recuperar_lista(N, [_X|Xs], Return):-
+    N > 0,
     Aux is N - 1,
     recuperar_lista(Aux, Xs, Return).
 
 
 % Determina si una lista cumple con sus pistas asociadas.
-
-verificar_pistas_con_linea(ListaPistas, ListaFila):-
-    verificar_pistas_con_linea_aux(ListaPistas, ListaFila).
-
-
-% Predicado auxiliar para determinar si una lista cumple con sus pistas asociadas.
 % El primer parámetro será una lista de pistas, y el segundo será una lista (línea) a verificar.
 
-verificar_pistas_con_linea_aux([],[]).
-verificar_pistas_con_linea_aux([], L):-                %si la lista de pistas esta vacia, verifico que no haya ningún "#".
+verificar_pistas_con_linea([],[]).
+verificar_pistas_con_linea([], L):-                %si la lista de pistas esta vacia, verifico que no haya ningún "#".
     not(pertenece("#", L)).			            
-verificar_pistas_con_linea_aux([X], L):-
+verificar_pistas_con_linea([X], L):-
     n_consecutivos(X, X, L, ListaResultante),          %si tengo un solo elemento en la lista de pistas y encuentro N "#" consecutivos, 
     not(pertenece("#", ListaResultante)).	           %me fijo que no haya ningun otro	"#"
-verificar_pistas_con_linea_aux([X|Xs], L):-		
+verificar_pistas_con_linea([X|Xs], L):-		
     n_consecutivos(X, X, L, Lista_sin_N_consecutivos),
-    verificar_pistas_con_linea_aux(Xs, Lista_sin_N_consecutivos).
+    verificar_pistas_con_linea(Xs, Lista_sin_N_consecutivos).
 
 
 % Determina si hay N elementos "#" consecutivos dentro de una lista
@@ -110,20 +105,11 @@ n_consecutivos(N, Ninicial, [E|Xs], R):-
 % y los retorna en forma de lista.
 
 recuperar_columna(N, [X], [ElementoObtenido]):-
-    obtenerElemento(N, X, ElementoObtenido).
+    recuperar_lista(N, X, ElementoObtenido).
 recuperar_columna(N, [X|Xs], ColumnaRetorno):-
-    obtenerElemento(N, X, Elemento),
+    recuperar_lista(N, X, Elemento),
     recuperar_columna(N, Xs, ColumnaRetornoAux),
     ColumnaRetorno = [Elemento|ColumnaRetornoAux].
-
-
-% Obtiene el elemento E de una lista en la posicion N y lo retorna.
-
-obtenerElemento(0, [X|_Xs], X).
-obtenerElemento(N, [_X|Xs], E):-
-    N > 0,
-    Aux is N - 1,
-    obtenerElemento(Aux, Xs, E).
 
 
 % Determina si un elemento E pertenece a una lista.
@@ -140,31 +126,35 @@ pertenece(E, [X|Xs]):-
 
 
 
-% Extra del proyecto
+% Verificacion del estado inicial de la grilla.
 
 verificacion_al_comenzar(Grilla, PistasFilas, PistasColumnas, ListaFilasQueCumplen, ListaColumnasQueCumplen):-
-    GrillaAux = Grilla,
-    verificar_fila_al_comenzar(0, Grilla, PistasFilas, ListaFilasQueCumplen),
+    %GrillaAux = Grilla,    %lo dejo comentado por las dudas si se rompe
+    %GrillaAux2 = Grilla,
+    longitud(Grilla, TotalFilas),           %Determina el total de filas de la grilla.
+    TotalFilasAux is TotalFilas - 1,        %Se resta 1 al total de filas para que recorra de 0 a N.
+    verificar_fila_al_comenzar(TotalFilasAux, Grilla, PistasFilas, ListaFilasQueCumplen),
     total_columnas(Grilla, TotalColumnas),
-    Aux is TotalColumnas - 1,  %Le resto 1 al total de columnas para que recorra de 0 a N.
-    verificar_columna_al_comenzar(Aux, GrillaAux, PistasColumnas, ListaColumnasQueCumplen).
+    Aux is TotalColumnas - 1,               %Se resta 1 al total de columnas para que recorra de 0 a N.
+    verificar_columna_al_comenzar(Aux, Grilla, PistasColumnas, ListaColumnasQueCumplen).
 
 
 % Inserta en una lista que retorna, los índices de las filas que se encuentran satisfechas.
 
-verificar_fila_al_comenzar(_N, [], _ListaPistas, []).
-verificar_fila_al_comenzar(N, [X|Xs], ListaPistas, ListaFilasQueCumplen):-
+verificar_fila_al_comenzar(-1, _Grilla, _ListaPistas, []).
+verificar_fila_al_comenzar(N, Grilla, ListaPistas, ListaFilasQueCumplen):-
 
     recuperar_lista(N, ListaPistas, ListaPistasRecuperada),
+    recuperar_lista(N, Grilla, LineaRecuperada),
 
     (ListaFilasQueCumplen = [N|ListaAux],
-    verificar_pistas_con_linea(ListaPistasRecuperada, X)
+    verificar_pistas_con_linea(ListaPistasRecuperada, LineaRecuperada)
     	;   
     ListaFilasQueCumplen = ListaAux),
     
-    Aux is N + 1,
-    verificar_fila_al_comenzar(Aux, Xs, ListaPistas, ListaAux).
- 
+    Aux is N - 1,
+    verificar_fila_al_comenzar(Aux, Grilla, ListaPistas, ListaAux).
+
 
 % Inserta en una lista que retorna, los índices de las columnas que se encuentran satisfechas.
 
@@ -195,20 +185,3 @@ longitud([_X|Sublista],R):-
 total_columnas([], 0).
 total_columnas([X|_Xs], Return):-
     longitud(X, Return).
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
