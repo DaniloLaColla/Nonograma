@@ -185,3 +185,18 @@ longitud([_X|Sublista],R):-
 total_columnas([], 0).
 total_columnas([X|_Xs], Return):-
     longitud(X, Return).
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
